@@ -1,6 +1,6 @@
 {
   "name": "brunch-typescript",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Adds TypeScript support to brunch.",
   "author": "Baptiste Donaux (http://www.baptiste-donaux.fr)",
   "homepage": "https://github.com/baptistedonaux/brunch-typescript",
@@ -21,5 +21,6 @@
   "keywords": [
     "typescript"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {}
 }

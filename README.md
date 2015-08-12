@@ -2,7 +2,7 @@
 Adds TypeScript support to [brunch](http://brunch.io).
 
 ## Usage
-Install the plugin via npm with `npm install --save typescript-brunch`.
+Install the plugin via npm with `npm install --save brunch-typescript`.
 
 Or, do manual install:
 
