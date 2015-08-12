@@ -14,5 +14,5 @@
     "main": "./lib/index",
     "dependencies": {
         "typescript": "1.5.*"
-    },
+    }
 }
