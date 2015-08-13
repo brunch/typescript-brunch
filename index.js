@@ -47,13 +47,13 @@ module.exports = TypeScriptCompiler = (function() {
                     console.log("brunch-typescript");
 
                     if (error !== null) {
-                        if (error !== null) {
-                            console.log(error);
-                        }
-
-                        // if (stdout !== null) {
-                        //     console.log(stdout);
+                        // if (error !== null) {
+                        //     console.log(error);
                         // }
+
+                        if (stdout !== null) {
+                            console.log(stdout);
+                        }
 
                         // if (stderr !== null) {
                         //     console.log(stderr);
