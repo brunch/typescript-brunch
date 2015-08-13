@@ -51,13 +51,13 @@ module.exports = TypeScriptCompiler = (function() {
                             console.log(error);
                         }
 
-                        if (stdout !== null) {
-                            console.log(stdout);
-                        }
+                        // if (stdout !== null) {
+                        //     console.log(stdout);
+                        // }
 
-                        if (stderr !== null) {
-                            console.log(stderr);
-                        }
+                        // if (stderr !== null) {
+                        //     console.log(stderr);
+                        // }
                     }
                 });
         }
