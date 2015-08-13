@@ -1,4 +1,4 @@
-## typscript-brunch
+## brunch-typescript
 Adds TypeScript support to [brunch](http://brunch.io).
 
 ## Usage
@@ -6,16 +6,16 @@ Install the plugin via npm with `npm install --save brunch-typescript`.
 
 Or, do manual install:
 
-* Add `"typscript-brunch": "x.y.z"` to `package.json` of your brunch app.
+* Add `"brunch-typescript": "x.y.z"` to `package.json` of your brunch app.
   Pick a plugin version that corresponds to your minor (y) brunch version.
 * If you want to use git version of plugin, add
-`"typscript-brunch": "git+ssh://git@github.com:baptistedonaux/typscript-brunch.git"`.
+`"brunch-typescript": "git+ssh://git@github.com:baptistedonaux/brunch-typescript.git"`.
 
 ## License
 
 The MIT License (MIT)
 
-Copyright (c) 2012-2013 Paul Miller (http://paulmillr.com)
+Copyright (c) 2015 Baptiste Donaux (http://www.baptiste-donaux.fr)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
