@@ -11,6 +11,19 @@ Or, do manual install:
 * If you want to use git version of plugin, add
 `"brunch-typescript": "git+ssh://git@github.com:baptistedonaux/brunch-typescript.git"`.
 
+## brunch-config
+Add the ``` tsc ``` command options to brunch-config.js as follows.
+
+``` js
+exports.config = {
+  plugins: {
+    brunchTypescript: {
+      tscOption: "--module commonJs"
+    }
+  }
+}
+```
+
 ## License
 
 The MIT License (MIT)

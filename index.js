@@ -17,15 +17,19 @@ module.exports = TypeScriptCompiler = (function() {
     }
 
     TypeScriptCompiler.prototype.compile = function(params, callback) {
-        var stderr = { 
-            Write: function (str) { 
-                process.stderr.write(str); 
-            }, 
-            WriteLine: function (str) { 
-                process.stderr.write(str + '\n'); 
-            }, 
-            Close: function () { 
-            } 
+        var opt = (typeof this.config.plugins.brunchTypescript === 'undefined'
+                    ? {} : this.config.plugins.brunchTypescript);
+        console.log("config.plugins.brunchTypescript:" + JSON.stringify(opt));
+
+        var stderr = {
+            Write: function (str) {
+                process.stderr.write(str);
+            },
+            WriteLine: function (str) {
+                process.stderr.write(str + '\n');
+            },
+            Close: function () {
+            }
         };
 
         var search = function(item, array){
@@ -41,11 +45,12 @@ module.exports = TypeScriptCompiler = (function() {
         var outFile = search(params.path, this.config.files.javascripts.joinTo);
 
         if (outFile != null) {
-            console.log(sysPath.join(__dirname));
-            var child = exec.exec(sysPath.join(__dirname) + '/node_modules/.bin/tsc --out ' + this.config.paths.public + '/' + outFile + ' ' + params.path,
-                function (error, stdout, stderr) {
-                    console.log("brunch-typescript");
+            var cmd = sysPath.join(__dirname) + '/node_modules/.bin/tsc --out '
+                        + this.config.paths.public + '/' + outFile + ' ' + params.path
+                        + (typeof opt.tscOption === 'undefined' ? '' : ' ' + opt.tscOption);
+            console.log(cmd);
 
+            var child = exec.exec(cmd, function (error, stdout, stderr) {
                     if (error !== null) {
                         // if (error !== null) {
                         //     console.log(error);
