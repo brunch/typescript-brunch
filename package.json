@@ -1,6 +1,6 @@
 {
   "name": "brunch-typescript",
-  "version": "1.5.8",
+  "version": "1.5.9",
   "description": "Adds TypeScript support to brunch.",
   "author": "Baptiste Donaux (http://www.baptiste-donaux.fr)",
   "homepage": "https://github.com/baptistedonaux/brunch-typescript",
