@@ -24,6 +24,12 @@ exports.config = {
 }
 ```
 
+## Contributors
+
+* [baptistedonaux](https://github.com/baptistedonaux "Baptiste Donaux")
+* [xtity](https://github.com/xtity "xtity")
+
+
 ## License
 
 The MIT License (MIT)
