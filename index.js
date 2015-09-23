@@ -3,7 +3,8 @@ var TypeScriptCompiler;
 module.exports = TypeScriptCompiler = (function() {
 
     var exec    = require('child_process'),
-        sysPath = require('path');
+        sysPath = require('path'),
+        mapping = {};
 
     TypeScriptCompiler.prototype.brunchPlugin = true;
 
@@ -13,62 +14,63 @@ module.exports = TypeScriptCompiler = (function() {
 
     function TypeScriptCompiler(config) {
         this.config = config;
-        null;
+    }
+
+    TypeScriptCompiler.prototype.preCompile = function(callback, params) {
+        var opt = (typeof this.config.plugins.brunchTypescript === 'undefined'
+                ? {} : this.config.plugins.brunchTypescript);
+
+        for (outFile in mapping) {
+            var cmd = sysPath.join(__dirname) + '/node_modules/.bin/tsc --out '
+                        + this.config.paths.public + '/' + outFile + ' ';
+
+            for (var i = mapping[outFile].length - 1; i >= 0; i--) {
+                cmd += mapping[outFile][i] + " ";
+            };
+
+            cmd += (typeof opt.tscOption === 'undefined' ? '' : ' ' + opt.tscOption);
+
+            var child = exec.exec(cmd, function (error, stdout, stderr) {
+                if (error !== null) {
+                    // if (error !== null) {
+                    //     console.log(error);
+                    // }
+
+                    if (stdout !== null) {
+                        console.log(stdout);
+                    }
+
+                    // if (stderr !== null) {
+                    //     console.log(stderr);
+                    // }
+                }
+            });
+        };
+
+        return callback(null, params);
     }
 
     TypeScriptCompiler.prototype.compile = function(params, callback) {
-        var opt = (typeof this.config.plugins.brunchTypescript === 'undefined'
-                    ? {} : this.config.plugins.brunchTypescript);
-        console.log("config.plugins.brunchTypescript:" + JSON.stringify(opt));
-
-        var stderr = {
-            Write: function (str) {
-                process.stderr.write(str);
-            },
-            WriteLine: function (str) {
-                process.stderr.write(str + '\n');
-            },
-            Close: function () {
-            }
-        };
-
-        var search = function(item, array){
-            for (key in array) {
-                if (array[key]) {
-                    return key;
-                }
-            }
-
-            return null;
-        };
-
-        var outFile = search(params.path, this.config.files.javascripts.joinTo);
-
-        if (outFile != null) {
-            var cmd = sysPath.join(__dirname) + '/node_modules/.bin/tsc --out '
-                        + this.config.paths.public + '/' + outFile + ' ' + params.path
-                        + (typeof opt.tscOption === 'undefined' ? '' : ' ' + opt.tscOption);
-            console.log(cmd);
-
-            var child = exec.exec(cmd, function (error, stdout, stderr) {
-                    if (error !== null) {
-                        // if (error !== null) {
-                        //     console.log(error);
-                        // }
-
-                        if (stdout !== null) {
-                            console.log(stdout);
-                        }
-
-                        // if (stderr !== null) {
-                        //     console.log(stderr);
-                        // }
+        if (typeof this.config.files.javascripts !== 'undefined' && typeof this.config.files.javascripts.joinTo !== 'undefined') {
+            var search = function(item, array) {
+                for (key in array) {
+                    if (array[key]) {
+                        return key;
                     }
-                });
+                }
+
+                return null;
+            };
+
+            var outFile = search(params.path, this.config.files.javascripts.joinTo);
+            if (typeof mapping[outFile] === 'undefined') {
+                mapping[outFile] = new Array();
+            }
+            mapping[outFile][mapping[outFile].length] = params.path;
         }
 
         return callback(null, params);
-    };
+    }
 
     return TypeScriptCompiler;
 
