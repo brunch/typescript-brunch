@@ -7,10 +7,9 @@ module.exports = TypeScriptCompiler = (function() {
         mapping = {};
 
     TypeScriptCompiler.prototype.brunchPlugin = true;
-
     TypeScriptCompiler.prototype.type = 'javascript';
-
     TypeScriptCompiler.prototype.extension = 'ts';
+    TypeScriptCompiler.prototype.pattern = /\.ts(x)?$/;
 
     function TypeScriptCompiler(config) {
         this.config = config;
