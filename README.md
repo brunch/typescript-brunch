@@ -28,6 +28,7 @@ exports.config = {
 
 * [baptistedonaux](https://github.com/baptistedonaux "Baptiste Donaux")
 * [xtity](https://github.com/xtity "xtity")
+* [kripod](https://github.com/kripod "Kristóf Poduszló")
 
 
 ## License
