@@ -1,6 +1,6 @@
 var TypeScriptCompiler;
 
-module.exports = TypeScriptCompiler = (function() {
+module.exports = TypeScriptCompiler = (function () {
 
     var exec    = require('child_process'),
         sysPath = require('path'),
@@ -15,7 +15,7 @@ module.exports = TypeScriptCompiler = (function() {
         this.config = config;
     }
 
-    TypeScriptCompiler.prototype.preCompile = function(callback, params) {
+    TypeScriptCompiler.prototype.preCompile = function (callback, params) {
         var opt = (
             typeof this.config.plugins.brunchTypescript === 'undefined' ?
             {} :
@@ -23,12 +23,10 @@ module.exports = TypeScriptCompiler = (function() {
         );
 
         for (outFile in mapping) {
-            var cmd = [];
-
-            cmd.push(
+            var cmd = [
                 sysPath.join(__dirname) + '/node_modules/.bin/tsc --out ' +
-                this.config.paths.public + '/' + outFile;
-            );
+                this.config.paths.public + '/' + outFile
+            ];
 
             for (var i = mapping[outFile].length - 1; i >= 0; i--) {
                 cmd.push(mapping[outFile][i]);
@@ -46,7 +44,7 @@ module.exports = TypeScriptCompiler = (function() {
 
             cmd.push(opt.tscOption);
 
-            var child = exec.exec(cmd.join(' '), function(error, stdout, stderr) {
+            var child = exec.exec(cmd.join(' '), function (error, stdout, stderr) {
                 if (error !== null) {
                     // if (error !== null) {
                     //     console.log(error);
@@ -66,9 +64,9 @@ module.exports = TypeScriptCompiler = (function() {
         return callback(null, params);
     }
 
-    TypeScriptCompiler.prototype.compile = function(params, callback) {
+    TypeScriptCompiler.prototype.compile = function (params, callback) {
         if (typeof this.config.files.javascripts !== 'undefined' && typeof this.config.files.javascripts.joinTo !== 'undefined') {
-            var search = function(item, array) {
+            var search = function (item, array) {
                 for (key in array) {
                     if (array[key]) {
                         return key;
