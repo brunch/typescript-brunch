@@ -1,112 +1,61 @@
 /*global __dirname */
-var TypeScriptCompiler;
+'use strict';
+const ts = require('typescript');
+const anymatch = require('anymatch');
 
-module.exports = TypeScriptCompiler = (function () {
+class TypeScriptCompiler {
+  constructor(config) {
+    if (!config) config = {};
+    let options = config.plugins &&
+      config.plugins.brunchTypescript || {};
+    this.options = {};
+    Object.keys(options).forEach(key => {
+      if (key === 'sourceMap' || key === 'ignore') return;
+      this.options[key] = options[key];
+    });
+    this.options.module = this.options.module || ts.ModuleKind.CommonJS;
+    this.options.target = this.options.target || ts.ScriptTarget.ES5;
+    this.options.sourceMap = !!config.sourceMaps;
+    this.isIgnored = anymatch(options.ignore || /^(bower_components|vendor|node_modules)/);
+    // if (this.options.pattern) {
+    //   this.pattern = this.options.pattern;
+    //   delete this.options.pattern;
+    // }
+  }
+  
+  compile(params) {
+    if (this.isIgnored(params.path)) {
+      return Promise.resolve(params);
+    }
+    let tsOptions = {
+      fileName: params.path,
+      compilerOptions: this.options
+    }
 
-    var exec    = require('child_process'),
-        sysPath = require('path'),
-        fs      = require('fs'),
-        mapping = {},
-        npm2    = sysPath.join(__dirname, 'node_modules/.bin/tsc'),
-        npm3    = sysPath.join(__dirname, '../.bin/tsc'),
-        compilerPath;
-
-    TypeScriptCompiler.prototype.brunchPlugin = true;
-    TypeScriptCompiler.prototype.type = 'javascript';
-    TypeScriptCompiler.prototype.extension = 'ts';
-    TypeScriptCompiler.prototype.pattern = /\.ts(x)?$/;
-    
-    if (fs.accessSync) {
+    return new Promise((resolve, reject) => {
+      let compiled;
       try {
-        fs.accessSync(npm2);
-        compilerPath = npm2;
-      } catch (e) {
-        compilerPath = npm3;
+        compiled = ts.transpileModule(params.data, tsOptions);
+      } catch (err) {
+        return reject(err);
       }
-    } else {
-      if (fs.existsSync(npm2)) {
-        compilerPath = npm2;
-      } else {
-        compilerPath = npm3;
+      const result = {data: compiled.outputText || compiled};
+
+      // Concatenation is broken by trailing comments in files, which occur
+      // frequently when comment nodes are lost in the AST from babel.
+      result.data += '\n';
+
+      if (compiled.sourceMapText) {
+        result.map = JSON.stringify(compiled.sourceMapText);
       }
-    }
+      resolve(result);
+    });
+  }
+}
 
-    function TypeScriptCompiler(config) {
-        this.config = config;
-    }
+TypeScriptCompiler.prototype.brunchPlugin = true;
+TypeScriptCompiler.prototype.type = 'javascript';
+TypeScriptCompiler.prototype.extension = 'ts';
+TypeScriptCompiler.prototype.pattern = /\.ts(x)?$/;
 
-    TypeScriptCompiler.prototype.preCompile = function (callback, params) {
-        var opt = (
-            typeof this.config.plugins.brunchTypescript === 'undefined' ?
-            {} :
-            this.config.plugins.brunchTypescript
-        );
-
-        for (var outFile in mapping) {
-            var cmd = [
-                compilerPath,
-                '--out',
-                sysPath.join(this.config.paths.public, outFile)
-            ];
-
-            for (var i = mapping[outFile].length - 1; i >= 0; i--) {
-                cmd.push(mapping[outFile][i]);
-            };
-
-            // Initialize options as a string
-            if (typeof opt.tscOption === 'undefined') {
-                opt.tscOption = '';
-            }
-
-            // Add support for React JSX files by default
-            if (opt.tscOption.indexOf('--jsx') < 0) {
-                cmd.push('--jsx react');
-            }
-
-            cmd.push(opt.tscOption);
-
-            var child = exec.exec(cmd.join(' '), function (error, stdout, stderr) {
-                if (error !== null) {
-                    // if (error !== null) {
-                    //     console.log(error);
-                    // }
-
-                    if (stdout !== null) {
-                        console.log(stdout);
-                    }
-
-                    // if (stderr !== null) {
-                    //     console.log(stderr);
-                    // }
-                }
-            });
-        };
-
-        return callback(null, params);
-    }
-
-    TypeScriptCompiler.prototype.compile = function (params, callback) {
-        if (typeof this.config.files.javascripts !== 'undefined' && typeof this.config.files.javascripts.joinTo !== 'undefined') {
-            var search = function (item, array) {
-                for (var key in array) {
-                    if (array[key]) {
-                        return key;
-                    }
-                }
-
-                return null;
-            };
-
-            var outFile = search(params.path, this.config.files.javascripts.joinTo);
-            if (typeof mapping[outFile] === 'undefined') {
-                mapping[outFile] = new Array();
-            }
-            mapping[outFile][mapping[outFile].length] = params.path;
-        }
-
-        return callback(null, params);
-    }
-
-    return TypeScriptCompiler;
-
-})();
+module.exports = TypeScriptCompiler;
