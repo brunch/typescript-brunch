@@ -40,6 +40,7 @@ This plugin will default to the following:
 * [baptistedonaux](https://github.com/baptistedonaux "Baptiste Donaux")
 * [xtity](https://github.com/xtity "xtity")
 * [kripod](https://github.com/kripod "Kristóf Poduszló")
+* [colinbate](https://github.com/colinbate "Colin Bate")
 
 
 ## License
