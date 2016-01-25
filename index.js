@@ -15,6 +15,8 @@ class TypeScriptCompiler {
     });
     this.options.module = this.options.module || ts.ModuleKind.CommonJS;
     this.options.target = this.options.target || ts.ScriptTarget.ES5;
+    this.options.emitDecoratorMetadata = this.options.emitDecoratorMetadata !== false,
+    this.options.experimentalDecorators = this.options.experimentalDecorators !== false,
     this.options.sourceMap = !!config.sourceMaps;
     this.isIgnored = anymatch(options.ignore || /^(bower_components|vendor|node_modules)/);
     // if (this.options.pattern) {
