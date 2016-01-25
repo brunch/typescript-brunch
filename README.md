@@ -7,20 +7,31 @@ Install the plugin via npm with `npm install --save brunch-typescript`.
 Or, do manual install:
 
 * Add `"brunch-typescript": "x.y.z"` to `package.json` of your brunch app.
-  Pick a plugin version that corresponds to your minor (y) brunch version.
+  Pick a plugin version that corresponds to your minor (y) brunch version. Use version 2.y.z if you are using the latest version of Brunch.
 * If you want to use git version of plugin, add
 `"brunch-typescript": "git+ssh://git@github.com:baptistedonaux/brunch-typescript.git"`.
 
 ## brunch-config
-Add the ``` tsc ``` command options to brunch-config.js as follows.
+Add any options for the TypeScript compiler to brunch-config.js as follows. These would be anything that you might put in your `tsconfig.json` file.
 
-``` js
+```js
 exports.config = {
   plugins: {
     brunchTypescript: {
-      tscOption: "--module commonJs"
+      removeComments: true
     }
   }
+}
+```
+
+This plugin will default to the following:
+
+```js
+{
+  target: "es5",
+  module: "commonjs",
+  emitDecoratorMetadata: true,
+  experimentalDecorators: true
 }
 ```
 
@@ -29,6 +40,7 @@ exports.config = {
 * [baptistedonaux](https://github.com/baptistedonaux "Baptiste Donaux")
 * [xtity](https://github.com/xtity "xtity")
 * [kripod](https://github.com/kripod "Kristóf Poduszló")
+* [colinbate](https://github.com/colinbate "Colin Bate")
 
 
 ## License
