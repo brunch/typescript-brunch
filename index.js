@@ -2,27 +2,58 @@
 'use strict';
 const ts = require('typescript');
 const anymatch = require('anymatch');
+const path = require('path');
+
+const resolveEnum = (choice, opts) => {
+  const defaultValue = 1; // CommonJS/ES5 defaults;
+  if (!choice) {
+    return defaultValue;
+  }
+  if (!isNaN(choice)) {
+    return choice - 0;
+  }
+  for (let opt of Object.keys(opts)) {
+    if (choice && choice.toUpperCase() === opt.toUpperCase()) {
+      return opts[opt];
+    }
+  }
+  return defaultValue;
+};
+
+const getTsconfig = (root) => {
+  if (!root) {
+    return {};
+  }
+  const file = path.resolve(root, 'tsconfig.json');
+  let tsconf;
+  try {
+    tsconf = require(file);
+  } catch (e) {
+    return {};
+  }
+  return tsconf.compilerOptions || {};
+};
 
 class TypeScriptCompiler {
   constructor(config) {
     if (!config) config = {};
-    let options = config.plugins &&
+    const options = config.plugins &&
       config.plugins.brunchTypescript || {};
-    this.options = {};
+    this.options = getTsconfig(config.paths && config.paths.root);
     Object.keys(options).forEach(key => {
       if (key === 'sourceMap' || key === 'ignore') return;
       this.options[key] = options[key];
     });
-    this.options.module = this.options.module || ts.ModuleKind.CommonJS;
-    this.options.target = this.options.target || ts.ScriptTarget.ES5;
+    this.options.module = resolveEnum(this.options.module, ts.ModuleKind);
+    this.options.target = resolveEnum(this.options.target, ts.ScriptTarget);
     this.options.emitDecoratorMetadata = this.options.emitDecoratorMetadata !== false,
     this.options.experimentalDecorators = this.options.experimentalDecorators !== false,
     this.options.sourceMap = !!config.sourceMaps;
     this.isIgnored = anymatch(options.ignore || /^(bower_components|vendor|node_modules)/);
-    // if (this.options.pattern) {
-    //   this.pattern = this.options.pattern;
-    //   delete this.options.pattern;
-    // }
+    if (this.options.pattern) {
+      this.pattern = this.options.pattern;
+      delete this.options.pattern;
+    }
   }
   
   compile(params) {

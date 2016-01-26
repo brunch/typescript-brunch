@@ -1,4 +1,5 @@
-## brunch-typescript
+# brunch-typescript
+
 Adds TypeScript support to [brunch](http://brunch.io).
 
 ## Usage
@@ -7,12 +8,15 @@ Install the plugin via npm with `npm install --save brunch-typescript`.
 Or, do manual install:
 
 * Add `"brunch-typescript": "x.y.z"` to `package.json` of your brunch app.
-  Pick a plugin version that corresponds to your minor (y) brunch version. Use version 2.y.z if you are using the latest version of Brunch.
+  Pick a plugin version that corresponds to your minor (y) TypeScript version. From version 1.7.0, this plugin requires version Brunch >=2.2.0.
 * If you want to use git version of plugin, add
 `"brunch-typescript": "git+ssh://git@github.com:baptistedonaux/brunch-typescript.git"`.
 
 ## brunch-config
-Add any options for the TypeScript compiler to brunch-config.js as follows. These would be anything that you might put in your `tsconfig.json` file.
+
+If there is a `tsconfig.json` file present in the root of your project, the `compilerOptions` from that will be used as defaults.
+
+Any options in your brunch-config.js/coffee will override those.
 
 ```js
 exports.config = {
@@ -24,7 +28,7 @@ exports.config = {
 }
 ```
 
-This plugin will default to the following:
+If no options are provided, this plugin will default to the following:
 
 ```js
 {
