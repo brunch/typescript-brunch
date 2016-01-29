@@ -74,12 +74,13 @@ class TypeScriptCompiler {
       }
       const result = {data: compiled.outputText || compiled};
 
-      // Concatenation is broken by trailing comments in files, which occur
-      // frequently when comment nodes are lost in the AST from babel.
       result.data += '\n';
 
       if (compiled.sourceMapText) {
-        result.map = JSON.stringify(compiled.sourceMapText);
+        // Fix the sources path so Brunch can merge them.
+        const rawMap = JSON.parse(compiled.sourceMapText);
+        rawMap.sources[0] = params.path;
+        result.map = JSON.stringify(rawMap);
       }
       resolve(result);
     });
