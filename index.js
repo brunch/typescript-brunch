@@ -5,7 +5,7 @@ const anymatch = require('anymatch');
 const path = require('path');
 
 const resolveEnum = (choice, opts) => {
-  const defaultValue = 1; // CommonJS/ES5 defaults;
+  const defaultValue = 1; // CommonJS/ES5/Preserve JSX defaults
   if (!choice) {
     return defaultValue;
   }
@@ -46,6 +46,7 @@ class TypeScriptCompiler {
     });
     this.options.module = resolveEnum(this.options.module, ts.ModuleKind);
     this.options.target = resolveEnum(this.options.target, ts.ScriptTarget);
+    this.options.jsx = resolveEnum(this.options.jsx, ts.JsxEmit);
     this.options.emitDecoratorMetadata = this.options.emitDecoratorMetadata !== false,
     this.options.experimentalDecorators = this.options.experimentalDecorators !== false,
     this.options.sourceMap = !!config.sourceMaps;
