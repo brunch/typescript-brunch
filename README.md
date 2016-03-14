@@ -45,6 +45,7 @@ If no options are provided, this plugin will default to the following:
 * [xtity](https://github.com/xtity "xtity")
 * [kripod](https://github.com/kripod "Kristóf Poduszló")
 * [colinbate](https://github.com/colinbate "Colin Bate")
+* [jpoehls](https://github.com/jpoehls "Joshua Poehls")
 
 
 ## License
