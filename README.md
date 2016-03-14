@@ -52,7 +52,7 @@ If no options are provided, this plugin will default to the following:
 
 The MIT License (MIT)
 
-Copyright (c) 2015 Baptiste Donaux (http://www.baptiste-donaux.fr)
+Copyright (c) 2016 Baptiste Donaux (http://www.baptiste-donaux.fr)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
