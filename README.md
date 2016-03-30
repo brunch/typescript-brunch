@@ -42,9 +42,9 @@ If no options are provided, this plugin will default to the following:
 ## Contributors
 
 * [baptistedonaux](https://github.com/baptistedonaux "Baptiste Donaux")
+* [colinbate](https://github.com/colinbate "Colin Bate")
 * [xtity](https://github.com/xtity "xtity")
 * [kripod](https://github.com/kripod "Kristóf Poduszló")
-* [colinbate](https://github.com/colinbate "Colin Bate")
 * [jpoehls](https://github.com/jpoehls "Joshua Poehls")
 
 
