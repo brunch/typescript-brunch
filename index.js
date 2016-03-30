@@ -1,5 +1,6 @@
 /*global __dirname */
 'use strict';
+const transpileModule = require('./transpile');
 const ts = require('typescript');
 const anymatch = require('anymatch');
 const path = require('path');
@@ -34,6 +35,22 @@ const getTsconfig = (root) => {
   return tsconf.compilerOptions || {};
 };
 
+
+const findLessOrEqual = (haystack, needle) => {
+  let i = 0;
+  while (i + 1 < haystack.length && needle >= haystack[i + 1]) {
+    i += 1;
+  }
+  return i === haystack.length ? -1 : i;
+}
+
+const errPos = err => {
+  const lineIndex = findLessOrEqual(err.file.lineMap, err.start);
+  return `Line: ${lineIndex + 1}, Col: ${err.start - err.file.lineMap[lineIndex] + 1}`;
+};
+
+const toMeaningfulMessage = err => `Error ${err.code}: ${err.messageText} (${errPos(err)})`;
+
 class TypeScriptCompiler {
   constructor(config) {
     if (!config) config = {};
@@ -49,6 +66,7 @@ class TypeScriptCompiler {
     this.options.jsx = resolveEnum(this.options.jsx, ts.JsxEmit);
     this.options.emitDecoratorMetadata = this.options.emitDecoratorMetadata !== false,
     this.options.experimentalDecorators = this.options.experimentalDecorators !== false,
+    this.options.noEmitOnError = false; // This can't be true when compiling this way.
     this.options.sourceMap = !!config.sourceMaps;
     this.isIgnored = anymatch(options.ignore || /^(bower_components|vendor|node_modules)/);
     if (this.options.pattern) {
@@ -63,13 +81,17 @@ class TypeScriptCompiler {
     }
     let tsOptions = {
       fileName: params.path,
+      reportDiagnostics: true,
       compilerOptions: this.options
     }
 
     return new Promise((resolve, reject) => {
       let compiled;
       try {
-        compiled = ts.transpileModule(params.data, tsOptions);
+        compiled = transpileModule(params.data, tsOptions);
+        if (compiled.diagnostics.length) {
+          reject(compiled.diagnostics.map(toMeaningfulMessage).join('\n'));
+        }
       } catch (err) {
         return reject(err);
       }
