@@ -1,7 +1,9 @@
 'use strict';
 const ts = require('typescript');
 
-const filterErrors = err => err.code !== 1208;
+const filterErrors = function(err) {
+    return err.code !== 1208 && err.code !== 2307;
+}
 
 module.exports = function transpileModule(input, transpileOptions) {
     var options = transpileOptions.compilerOptions ? ts.clone(transpileOptions.compilerOptions) : getDefaultCompilerOptions();
