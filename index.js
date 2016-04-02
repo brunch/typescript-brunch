@@ -67,11 +67,16 @@ class TypeScriptCompiler {
     this.options.emitDecoratorMetadata = this.options.emitDecoratorMetadata !== false,
     this.options.experimentalDecorators = this.options.experimentalDecorators !== false,
     this.options.noEmitOnError = false; // This can't be true when compiling this way.
+    delete this.options.moduleResolution;
     this.options.sourceMap = !!config.sourceMaps;
     this.isIgnored = anymatch(options.ignore || /^(bower_components|vendor|node_modules)/);
     if (this.options.pattern) {
       this.pattern = this.options.pattern;
       delete this.options.pattern;
+    }
+    if (this.options.ignoreErrors) {
+      this.ignoreErrors = new Set(this.options.ignoreErrors);
+      delete this.options.ignoreErrors;
     }
   }
   
@@ -89,8 +94,12 @@ class TypeScriptCompiler {
       let compiled;
       try {
         compiled = transpileModule(params.data, tsOptions);
-        if (compiled.diagnostics.length) {
-          reject(compiled.diagnostics.map(toMeaningfulMessage).join('\n'));
+        let reportable = compiled.diagnostics;
+        if (this.ignoreErrors) {
+          reportable = reportable.filter(err => !this.ignoreErrors.has(err.code));
+        }
+        if (reportable.length) {
+          reject(reportable.map(toMeaningfulMessage).join('\n'));
         }
       } catch (err) {
         return reject(err);
