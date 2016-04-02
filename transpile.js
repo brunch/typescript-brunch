@@ -54,7 +54,6 @@ module.exports = function transpileModule(input, transpileOptions) {
     if (transpileOptions.reportDiagnostics) {
         diagnostics = [];
         ts.addRange(/*to*/ diagnostics, /*from*/ program.getSyntacticDiagnostics(sourceFile));
-        ts.addRange(/*to*/ diagnostics, /*from*/ program.getSemanticDiagnostics(sourceFile).filter(filterErrors));
         ts.addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
     }
     // Emit
