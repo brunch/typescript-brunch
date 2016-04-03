@@ -1,7 +1,13 @@
 'use strict';
 const ts = require('typescript');
 
-const filterErrors = err => err.code !== 1208;
+const ignoredErrors = new Set([
+  1208, // Cannot compile namespaces when the '--isolatedModules' flag is provided.
+  2307, // Cannot find module '{0}'.
+  2304, // Cannot find name '{0}'.
+  2339  // Property '{0}' does not exist on type '{1}'.
+]);
+const filterErrors = err => !ignoredErrors.has(err.code);
 
 module.exports = function transpileModule(input, transpileOptions) {
     var options = transpileOptions.compilerOptions ? ts.clone(transpileOptions.compilerOptions) : getDefaultCompilerOptions();
