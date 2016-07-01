@@ -5,6 +5,7 @@ const ignoredErrors = new Set([
   1208, // Cannot compile namespaces when the '--isolatedModules' flag is provided.
   2307, // Cannot find module '{0}'.
   2304, // Cannot find name '{0}'.
+  2322, // Type '{0}' is not assignable to type '{1}'.
   2339  // Property '{0}' does not exist on type '{1}'.
 ]);
 const filterErrors = err => !ignoredErrors.has(err.code);
