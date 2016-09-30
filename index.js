@@ -75,7 +75,11 @@ class TypeScriptCompiler {
       delete this.options.pattern;
     }
     if (this.options.ignoreErrors) {
-      this.ignoreErrors = new Set(this.options.ignoreErrors);
+      if (this.options.ignoreErrors === true) {
+        this.ignoreAllError = true;
+      } else {
+        this.ignoreErrors = new Set(this.options.ignoreErrors);
+      }
       delete this.options.ignoreErrors;
     }
   }
@@ -95,7 +99,9 @@ class TypeScriptCompiler {
       try {
         compiled = transpileModule(params.data, tsOptions);
         let reportable = compiled.diagnostics;
-        if (this.ignoreErrors) {
+        if (this.ignoreAllErrors === true) {
+          reportable = [];
+        } else if (this.ignoreErrors) {
           reportable = reportable.filter(err => !this.ignoreErrors.has(err.code));
         }
         if (reportable.length) {
