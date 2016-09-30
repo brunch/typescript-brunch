@@ -39,6 +39,16 @@ If no options are provided, this plugin will default to the following:
 }
 ```
 
+## Errors
+
+From version 1.8.2 up to current version, this plugin may report TypeScript errors that you are not expecting. This is due to the fact that this plugin compiles each file separately in isolation, and doesn't take advantage of the full TypeScript project. As such there are some errors which may appear which are false positives.
+
+Starting in 1.8.3 you could add an `ignoreErrors` property the plugin config object in the `brunch-config` file. This was an array of error numbers to ignore. Starting in 2.0.0, you can ignore all TypeScript errors by setting `ignoreErrors` to `true`. Setting it to an array still works as before.
+
+We are hoping to support the full language service, at least for `brunch build` at some point, but until then, we recommend that you add `tsc --noEmit` to your test script or build script to catch proper errors within your project.
+
+Just to note that this shouldn't affect any TypeScript support your editor/IDE provides, which should also allow you to identify real errors.
+
 ## Contributors
 
 * [baptistedonaux](https://github.com/baptistedonaux "Baptiste Donaux")
