@@ -76,7 +76,7 @@ class TypeScriptCompiler {
     }
     if (this.options.ignoreErrors) {
       if (this.options.ignoreErrors === true) {
-        this.ignoreAllError = true;
+        this.ignoreAllErrors = true;
       } else {
         this.ignoreErrors = new Set(this.options.ignoreErrors);
       }
