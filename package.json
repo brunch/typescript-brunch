@@ -1,6 +1,6 @@
 {
   "name": "brunch-typescript",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Adds TypeScript support to brunch.",
   "author": "Baptiste Donaux (http://www.baptiste-donaux.fr)",
   "contributors": [
