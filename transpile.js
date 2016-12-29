@@ -23,6 +23,8 @@ module.exports = function transpileModule(input, transpileOptions) {
     // We are not doing a full typecheck, we are not resolving the whole context,
     // so pass --noResolve to avoid reporting missing file errors.
     options.noResolve = true;
+    // We do want to emit here, so specifically enable it.
+    options.noEmit = false;
     // if jsx is specified then treat file as .tsx
     var inputFileName = transpileOptions.fileName || (options.jsx ? "module.tsx" : "module.ts");
     var sourceFile = ts.createSourceFile(inputFileName, input, options.target);

@@ -8,7 +8,7 @@ Install the plugin via npm with `npm install --save brunch-typescript`.
 Or, do manual install:
 
 * Add `"brunch-typescript": "x.y.z"` to `package.json` of your brunch app.
-  Pick a plugin version that corresponds to your minor (y) TypeScript version. From version 1.7.0, this plugin requires version Brunch >=2.2.0.
+  Pick a plugin version that corresponds to your major.minor (x.y) TypeScript version. From version 1.7.0, this plugin requires version Brunch >=2.2.0.
 * If you want to use git version of plugin, add
 `"brunch-typescript": "git+ssh://git@github.com:baptistedonaux/brunch-typescript.git"`.
 
