@@ -16,9 +16,6 @@ before_deploy: |
   if [ -z "$GITHUB_API_KEY" ]; then
     echo "No GITHUB_API_KEY given ! Deployment skipped"
     exit 0
-  else
-    git tag $VERSION
-    git push https://baptistedonaux:$GITHUB_API_KEY@github.com/baptistedonaux/brunch-typescript --tags
   fi
 
 deploy:
