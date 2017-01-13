@@ -2,7 +2,7 @@
   "name": "brunch-typescript",
   "version": "2.1.0",
   "description": "Adds TypeScript support to brunch.",
-  "author": "Baptiste Donaux (http://www.baptiste-donaux.fr)",
+  "author": "Baptiste Donaux <baptiste.donaux@gmail.com>",
   "contributors": [
     "Colin Bate <colin@colinbate.com>"
   ],
@@ -20,7 +20,7 @@
     "url": "https://github.com/baptistedonaux/brunch-typescript/issues"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint *.js"
   },
   "keywords": [
     "typescript",
@@ -28,7 +28,9 @@
     "tsc"
   ],
   "license": "MIT",
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^3.13.1"
+  },
   "peerDependencies": {
     "brunch": "^2.2.0"
   }
