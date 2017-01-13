@@ -4,6 +4,11 @@ node_js:
   - "6"
   - "node"
 
+branches:
+  only:
+    - master
+    - /^\d+\.\d+\.\d+$/
+
 install:
   - npm install
 
