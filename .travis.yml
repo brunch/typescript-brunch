@@ -4,11 +4,6 @@ node_js:
   - "6"
   - "node"
 
-branches:
-  only:
-    - master
-    - improvement
-
 install:
   - npm install
 
