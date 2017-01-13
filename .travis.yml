@@ -6,23 +6,28 @@ node_js:
 
 branches:
   only:
-    - /^\d+\.\d+\.\d+$/
+    - master
 
 install:
   - npm install
 
 script:
   - npm test
+  - VERSION=`node -e "console.log(require('./package.json').version);"`
+  - if [ \( -n $TRAVIS_TAG \) -a \( $TRAVIS_TAG != $VERSION \) ]; then echo "Git Tag and package version mismatch"; fi
 
 before_deploy: |
   if [ -z "$GITHUB_API_KEY" ]; then
     echo "No GITHUB_API_KEY given ! Deployment skipped"
     exit 0
+  else
+    git tag $VERSION
+    git push https://baptistedonaux:$GITHUB_API_KEY@github.com/baptistedonaux/brunch-typescript --tags
   fi
 
 deploy:
+  provider: npm
+  api_key: $NPM_API_KEY
   on:
     tags: true
-  - VERSION=`node -e "console.log(require('./package.json').version);"`
-  - if [ $TRAVIS_TAG != $VERSION ]; then echo "Git Tag and package version mismatch" ; fi
  
