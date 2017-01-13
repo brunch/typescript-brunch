@@ -4,8 +4,25 @@ node_js:
   - "6"
   - "node"
 
-before_script:
+branches:
+  only:
+    - /^\d+\.\d+\.\d+$/
+
+install:
   - npm install
 
 script:
   - npm test
+
+before_deploy: |
+  if [ -z "$GITHUB_API_KEY" ]; then
+    echo "No GITHUB_API_KEY given ! Deployment skipped"
+    exit 0
+  fi
+
+deploy:
+  on:
+    tags: true
+  - VERSION=`node -e "console.log(require('./package.json').version);"`
+  - if [ $TRAVIS_TAG != $VERSION ]; then echo "Git Tag and package version mismatch" ; fi
+ 
