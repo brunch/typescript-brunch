@@ -12,10 +12,12 @@ branches:
 install:
   - npm install
 
-script:
-  - npm test
-  - VERSION=`node -e "console.log(require('./package.json').version);"`
-  - if [ \( -n $TRAVIS_TAG \) -a \( $TRAVIS_TAG != $VERSION \) ]; then echo "Git Tag and package version mismatch"; fi
+script: |
+  npm test
+  VERSION=`node -e "console.log(require('./package.json').version);"`
+  if [ \( -n $TRAVIS_TAG \) -a \( $TRAVIS_TAG != $VERSION \) ]; then
+    echo "Git Tag and package version mismatch"
+  fi
 
 before_deploy: |
   if [ -z "$GITHUB_API_KEY" ]; then
