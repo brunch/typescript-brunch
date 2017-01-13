@@ -1,17 +1,20 @@
-'use strict';
-const ts = require('typescript');
+"use strict";
+
+const ts = require("typescript");
 
 const ignoredErrors = new Set([
-  1208, // Cannot compile namespaces when the '--isolatedModules' flag is provided.
-  2307, // Cannot find module '{0}'.
-  2304, // Cannot find name '{0}'.
-  2322, // Type '{0}' is not assignable to type '{1}'.
-  2339  // Property '{0}' does not exist on type '{1}'.
+    1208, // Cannot compile namespaces when the "--isolatedModules" flag is provided.
+    2307, // Cannot find module "{0}".
+    2304, // Cannot find name "{0}".
+    2322, // Type "{0}" is not assignable to type "{1}".
+    2339  // Property "{0}" does not exist on type "{1}".
 ]);
+
 const filterErrors = err => !ignoredErrors.has(err.code);
 
 module.exports = function transpileModule(input, transpileOptions) {
     var options = transpileOptions.compilerOptions ? ts.clone(transpileOptions.compilerOptions) : getDefaultCompilerOptions();
+
     options.isolatedModules = true;
     // transpileModule does not write anything to disk so there is no need to verify that there are no conflicts between input and output paths. 
     options.suppressOutputPathCheck = true;
@@ -38,25 +41,45 @@ module.exports = function transpileModule(input, transpileOptions) {
     var sourceMapText;
     // Create a compilerHost object to allow the compiler to read and write files
     var compilerHost = {
-        getSourceFile: function (fileName, target) { return fileName === ts.normalizeSlashes(inputFileName) ? sourceFile : undefined; },
-        writeFile: function (name, text, writeByteOrderMark) {
+        getSourceFile: function (fileName) {
+            return fileName === ts.normalizeSlashes(inputFileName)
+                ? sourceFile
+                : undefined;
+        },
+        writeFile: function (name, text) {
             if (ts.fileExtensionIs(name, ".map")) {
-                ts.Debug.assert(sourceMapText === undefined, "Unexpected multiple source map outputs for the file '" + name + "'");
+                ts.Debug.assert(sourceMapText === undefined, `Unexpected multiple source map outputs for the file ${name}`);
                 sourceMapText = text;
             }
             else {
-                ts.Debug.assert(outputText === undefined, "Unexpected multiple outputs for the file: '" + name + "'");
+                ts.Debug.assert(outputText === undefined, `Unexpected multiple outputs for the file: ${name}`);
                 outputText = text;
             }
         },
-        getDefaultLibFileName: function () { return "lib.d.ts"; },
-        useCaseSensitiveFileNames: function () { return false; },
-        getCanonicalFileName: function (fileName) { return fileName; },
-        getCurrentDirectory: function () { return ""; },
-        getNewLine: function () { return newLine; },
-        fileExists: function (fileName) { return fileName === inputFileName; },
-        readFile: function (fileName) { return ""; },
-        directoryExists: function (directoryExists) { return true; }
+        getDefaultLibFileName: function () {
+            return "lib.d.ts";
+        },
+        useCaseSensitiveFileNames: function () {
+            return false;
+        },
+        getCanonicalFileName: function (fileName) {
+            return fileName;
+        },
+        getCurrentDirectory: function () {
+            return "";
+        },
+        getNewLine: function () {
+            return newLine;
+        },
+        fileExists: function (fileName) {
+            return fileName === inputFileName;
+        },
+        readFile: function () {
+            return "";
+        },
+        directoryExists: function () {
+            return true;
+        }
     };
     var program = ts.createProgram([inputFileName], options, compilerHost);
     var diagnostics;
@@ -70,4 +93,4 @@ module.exports = function transpileModule(input, transpileOptions) {
     program.emit();
     ts.Debug.assert(outputText !== undefined, "Output generation failed");
     return { outputText: outputText, diagnostics: diagnostics, sourceMapText: sourceMapText };
-}
+};
