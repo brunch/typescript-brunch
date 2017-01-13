@@ -13,7 +13,7 @@ const ignoredErrors = new Set([
 const filterErrors = err => !ignoredErrors.has(err.code);
 
 module.exports = function transpileModule(input, transpileOptions) {
-    var options = transpileOptions.compilerOptions ? ts.clone(transpileOptions.compilerOptions) : getDefaultCompilerOptions();
+    var options = ts.clone(transpileOptions.compilerOptions);
 
     options.isolatedModules = true;
     // transpileModule does not write anything to disk so there is no need to verify that there are no conflicts between input and output paths. 
