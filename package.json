@@ -20,7 +20,7 @@
     "url": "https://github.com/baptistedonaux/brunch-typescript/issues"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint ."
   },
   "keywords": [
     "typescript",
@@ -28,8 +28,14 @@
     "tsc"
   ],
   "license": "MIT",
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^3.15.0",
+    "eslint-config-brunch": "^1.0.0"
+  },
   "peerDependencies": {
     "brunch": "^2.2.0"
+  },
+  "eslintConfig": {
+    "extends": "brunch"
   }
 }
