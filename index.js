@@ -1,5 +1,5 @@
-/*global __dirname */
 'use strict';
+
 const transpileModule = require('./transpile');
 const ts = require('typescript');
 const anymatch = require('anymatch');
@@ -13,7 +13,7 @@ const resolveEnum = (choice, opts) => {
   if (!isNaN(choice)) {
     return choice - 0;
   }
-  for (let opt of Object.keys(opts)) {
+  for (const opt of Object.keys(opts)) {
     if (choice && choice.toUpperCase() === opt.toUpperCase()) {
       return opts[opt];
     }
@@ -21,7 +21,7 @@ const resolveEnum = (choice, opts) => {
   return defaultValue;
 };
 
-const getTsconfig = (root) => {
+const getTsconfig = root => {
   if (!root) {
     return {};
   }
@@ -42,7 +42,7 @@ const findLessOrEqual = (haystack, needle) => {
     i += 1;
   }
   return i === haystack.length ? -1 : i;
-}
+};
 
 const errPos = err => {
   const lineIndex = findLessOrEqual(err.file.lineMap, err.start);
@@ -83,16 +83,16 @@ class TypeScriptCompiler {
       delete this.options.ignoreErrors;
     }
   }
-  
+
   compile(params) {
     if (this.isIgnored(params.path)) {
       return Promise.resolve(params);
     }
-    let tsOptions = {
+    const tsOptions = {
       fileName: params.path,
       reportDiagnostics: true,
-      compilerOptions: this.options
-    }
+      compilerOptions: this.options,
+    };
 
     return new Promise((resolve, reject) => {
       let compiled;
