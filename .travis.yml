@@ -1,32 +1,5 @@
 language: node_js
 node_js:
-  - "4"
-  - "6"
-  - "node"
-
-branches:
-  only:
-    - master
-    - /^\d+\.\d+\.\d+$/
-
-install:
-  - npm install
-
-script:
-  - npm test
-  - VERSION=`node -e "console.log(require('./package.json').version);"`
-  - if [ \( -n $TRAVIS_TAG \) -a \( $TRAVIS_TAG != $VERSION \) ]; then echo "Git Tag and package version mismatch" && exit 1; fi
-
-before_deploy: |
-  if [ -z "$GITHUB_API_KEY" ]; then
-    echo "No GITHUB_API_KEY given ! Deployment skipped"
-    exit 0
-  fi
-
-deploy:
-  provider: npm
-  email: $NPM_EMAIL
-  api_key: $NPM_API_KEY
-  on:
-    tags: true
- 
+  - node
+  - 6
+  - 4
