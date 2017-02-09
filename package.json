@@ -1,22 +1,22 @@
 {
-  "name": "brunch-typescript",
+  "name": "typescript-brunch",
   "version": "2.1.0",
   "description": "Adds TypeScript support to Brunch.",
   "author": "Baptiste Donaux <baptiste.donaux@gmail.com>",
   "contributors": [
     "Colin Bate <colin@colinbate.com>"
   ],
-  "homepage": "https://github.com/baptistedonaux/brunch-typescript",
+  "homepage": "https://github.com/brunch/typescript-brunch",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/baptistedonaux/brunch-typescript.git"
+    "url": "git+ssh://git@github.com/brunch/typescript-brunch.git"
   },
   "main": "./index.js",
   "files": [
     "*.js"
   ],
   "bugs": {
-    "url": "https://github.com/baptistedonaux/brunch-typescript/issues"
+    "url": "https://github.com/brunch/typescript-brunch/issues"
   },
   "scripts": {
     "test": "eslint ."

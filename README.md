@@ -1,16 +1,17 @@
-# brunch-typescript [![Build Status](https://travis-ci.org/baptistedonaux/brunch-typescript.svg?branch=master)](https://travis-ci.org/baptistedonaux/brunch-typescript)
+# typescript-brunch [![Build Status](https://travis-ci.org/brunch/typescript-brunch.svg?branch=master)](https://travis-ci.org/brunch/typescript-brunch)
 
 Adds TypeScript support to [brunch](http://brunch.io).
 
 ## Usage
-Install the plugin via npm with `npm install --save brunch-typescript`.
+
+Install the plugin via NPM with `npm install --save-dev typescript-brunch`.
 
 Or, do manual install:
 
 * Add `"brunch-typescript": "x.y.z"` to `package.json` of your brunch app.
   Pick a plugin version that corresponds to your major.minor (x.y) TypeScript version. From version 1.7.0, this plugin requires version Brunch >=2.2.0.
 * If you want to use git version of plugin, add
-`"brunch-typescript": "git+ssh://git@github.com:baptistedonaux/brunch-typescript.git"`.
+`"typescript-brunch": "git+ssh://git@github.com:brunch/typescript-brunch.git"`.
 
 ## brunch-config
 
