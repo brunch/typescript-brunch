@@ -41,9 +41,9 @@ const findLessOrEqual = (haystack, needle) => {
 };
 
 const errPos = err => {
-    const lineIndex = findLessOrEqual(err.file.lineMap, err.start);
+  const lineIndex = findLessOrEqual(err.file.lineMap, err.start);
 
-    return `Line: ${lineIndex + 1}, Col: ${err.start - err.file.lineMap[lineIndex] + 1}`;
+  return `Line: ${lineIndex + 1}, Col: ${err.start - err.file.lineMap[lineIndex] + 1}`;
 };
 
 const toMeaningfulMessage = err => `Error ${err.code}: ${err.messageText} (${errPos(err)})`;
@@ -133,8 +133,8 @@ class TypeScriptCompiler {
 }
 
 TypeScriptCompiler.prototype.brunchPlugin = true;
-TypeScriptCompiler.prototype.type = "javascript";
-TypeScriptCompiler.prototype.extension = "ts";
+TypeScriptCompiler.prototype.type = 'javascript';
+TypeScriptCompiler.prototype.extension = 'ts';
 TypeScriptCompiler.prototype.pattern = /\.ts(x)?$/;
 
 module.exports = TypeScriptCompiler;
