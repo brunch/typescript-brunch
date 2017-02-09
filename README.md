@@ -1,6 +1,6 @@
 # typescript-brunch [![Build Status](https://travis-ci.org/brunch/typescript-brunch.svg?branch=master)](https://travis-ci.org/brunch/typescript-brunch)
 
-Adds TypeScript support to [brunch](http://brunch.io).
+Adds TypeScript support to [Brunch](http://brunch.io).
 
 ## Usage
 
@@ -8,8 +8,7 @@ Install the plugin via NPM with `npm install --save-dev typescript-brunch`.
 
 Or, do manual install:
 
-* Add `"brunch-typescript": "x.y.z"` to `package.json` of your brunch app.
-  Pick a plugin version that corresponds to your major.minor (x.y) TypeScript version. From version 1.7.0, this plugin requires version Brunch >=2.2.0.
+* Add `"typescript-brunch": "x.y.z"` to `package.json` of your brunch app. Pick a plugin version that corresponds to your major.minor (x.y) TypeScript version. From version 1.7.0, this plugin requires version Brunch >=2.2.0.
 * If you want to use git version of plugin, add
 `"typescript-brunch": "git+ssh://git@github.com:brunch/typescript-brunch.git"`.
 
@@ -17,16 +16,17 @@ Or, do manual install:
 
 If there is a `tsconfig.json` file present in the root of your project, the `compilerOptions` from that will be used as defaults.
 
-Any options in your brunch-config.js/coffee will override those.
+Any options in your `brunch-config.js` or `brunch-config.coffee` will override those.
 
 ```js
-exports.config = {
+module.exports = {
+  // ...
   plugins: {
     brunchTypescript: {
       removeComments: true
     }
   }
-}
+};
 ```
 
 If no options are provided, this plugin will default to the following:
@@ -63,7 +63,7 @@ Just to note that this shouldn't affect any TypeScript support your editor/IDE p
 
 The MIT License (MIT)
 
-Copyright (c) 2016 Baptiste Donaux (http://www.baptiste-donaux.fr)
+Copyright (c) 2017 Baptiste Donaux (http://www.baptiste-donaux.fr)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
