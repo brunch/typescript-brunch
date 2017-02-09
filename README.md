@@ -1,4 +1,4 @@
-# brunch-typescript
+# brunch-typescript [![Build Status](https://travis-ci.org/baptistedonaux/brunch-typescript.svg?branch=master)](https://travis-ci.org/baptistedonaux/brunch-typescript)
 
 Adds TypeScript support to [brunch](http://brunch.io).
 
