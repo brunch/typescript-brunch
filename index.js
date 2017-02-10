@@ -134,7 +134,6 @@ class TypeScriptCompiler {
 
 TypeScriptCompiler.prototype.brunchPlugin = true;
 TypeScriptCompiler.prototype.type = 'javascript';
-TypeScriptCompiler.prototype.extension = 'ts';
-TypeScriptCompiler.prototype.pattern = /\.ts(x)?$/;
+TypeScriptCompiler.prototype.pattern = /\.tsx?$/;
 
 module.exports = TypeScriptCompiler;
