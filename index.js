@@ -41,9 +41,16 @@ const findLessOrEqual = (haystack, needle) => {
 };
 
 const errPos = err => {
-  const lineIndex = findLessOrEqual(err.file.lineMap, err.start);
+  const errFile = err.file;
+  if (errFile) {
+    const lineMap = err.file.lineMap;
+    if (lineMap) {
+      const lineIndex = findLessOrEqual(lineMap, err.start);
 
-  return `Line: ${lineIndex + 1}, Col: ${err.start - err.file.lineMap[lineIndex] + 1}`;
+      return `Line: ${lineIndex + 1}, Col: ${err.start - err.file.lineMap[lineIndex] + 1}`;
+    }
+  }
+  return 'No line map'
 };
 
 const toMeaningfulMessage = err => `Error ${err.code}: ${err.messageText} (${errPos(err)})`;
