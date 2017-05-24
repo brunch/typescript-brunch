@@ -23,6 +23,8 @@ const transpileModule = (input, transpileOptions) => {
   // We are not returning a sourceFile for lib file when asked by the program,
   // so pass --noLib to avoid reporting a file not found error.
   options.noLib = true;
+  // In case it was defined, this is needed to work with noLib above.
+  options.lib = undefined;
   // We are not doing a full typecheck, we are not resolving the whole context,
   // so pass --noResolve to avoid reporting missing file errors.
   options.noResolve = true;
