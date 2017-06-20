@@ -78,8 +78,7 @@ class TypeScriptCompiler {
     delete this.options.moduleResolution;
 
     this.options.sourceMap = !!config.sourceMaps;
-    this.isIgnored = anymatch(options.ignore || /(^bower_components|vendor|node_modules)/);
-
+    this.isIgnored = anymatch(options.ignore || config.conventions.vendor);
     if (this.options.pattern) {
       this.pattern = this.options.pattern;
       delete this.options.pattern;
