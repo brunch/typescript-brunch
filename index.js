@@ -68,6 +68,12 @@ class TypeScriptCompiler {
       this.options[key] = options[key];
     });
 
+    if (this.options.jsx === 'preserve') {
+      this.targetExtension = '.jsx';
+    } else {
+      this.targetExtension = '.js';
+    }
+
     this.options.module = resolveEnum(this.options.module, ts.ModuleKind);
     this.options.target = resolveEnum(this.options.target, ts.ScriptTarget);
     this.options.jsx = resolveEnum(this.options.jsx, ts.JsxEmit);
