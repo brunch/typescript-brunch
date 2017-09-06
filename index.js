@@ -91,46 +91,36 @@ class TypeScriptCompiler {
     }
   }
 
-  compile(params) {
-    if (this.isIgnored(params.path)) return Promise.resolve(params);
+  compile(file) {
+    if (this.isIgnored(file.path)) return file;
 
-    const tsOptions = {
-      fileName: params.path,
+    const compiled = transpileModule(file.data, {
+      fileName: file.path,
       reportDiagnostics: true,
       compilerOptions: this.options,
-    };
-
-    return new Promise((resolve, reject) => {
-      let compiled;
-
-      try {
-        compiled = transpileModule(params.data, tsOptions);
-        let reportable = compiled.diagnostics;
-
-        if (this.ignoreAllErrors === true) {
-          reportable = [];
-        } else if (this.ignoreErrors) {
-          reportable = reportable.filter(err => !this.ignoreErrors.has(err.code));
-        }
-
-        if (reportable.length) {
-          reject(reportable.map(toMeaningfulMessage).join('\n'));
-        }
-      } catch (err) {
-        return reject(err);
-      }
-
-      const result = {data: `${compiled.outputText || compiled}\n`};
-
-      if (compiled.sourceMapText) {
-        // Fix the sources path so Brunch can merge them.
-        const rawMap = JSON.parse(compiled.sourceMapText);
-        rawMap.sources[0] = params.path;
-        result.map = JSON.stringify(rawMap);
-      }
-
-      resolve(result);
     });
+
+    let diag = compiled.diagnostics;
+    if (this.ignoreAllErrors) {
+      diag = [];
+    } else if (this.ignoreErrors) {
+      diag = diag.filter(err => !this.ignoreErrors.has(err.code));
+    }
+
+    if (diag.length) {
+      throw diag.map(toMeaningfulMessage).join('\n');
+    }
+
+    const result = {data: `${compiled.outputText || compiled}\n`};
+
+    if (compiled.sourceMapText) {
+      // Fix the sources path so Brunch can merge them.
+      const rawMap = JSON.parse(compiled.sourceMapText);
+      rawMap.sources[0] = file.path;
+      result.map = JSON.stringify(rawMap);
+    }
+
+    return result;
   }
 }
 
