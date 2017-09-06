@@ -1,5 +1,4 @@
 'use strict';
-
 const transpileModule = require('./transpile');
 const ts = require('typescript');
 const anymatch = require('anymatch');
@@ -40,7 +39,7 @@ const findLessOrEqual = (haystack, needle) => {
 
 const errPos = err => {
   if (err.file) {
-    const lineMap = err.file.lineMap;
+    const {lineMap} = err.file;
     if (lineMap) {
       const lineIndex = findLessOrEqual(lineMap, err.start);
 
@@ -65,12 +64,7 @@ class TypeScriptCompiler {
       this.options[key] = options[key];
     });
 
-    if (this.options.jsx === 'preserve') {
-      this.targetExtension = '.jsx';
-    } else {
-      this.targetExtension = '.js';
-    }
-
+    this.targetExtension = this.options.jsx === 'preserve' ? 'jsx' : 'js';
     this.options.module = resolveEnum(this.options.module, ts.ModuleKind);
     this.options.target = resolveEnum(this.options.target, ts.ScriptTarget);
     this.options.jsx = resolveEnum(this.options.jsx, ts.JsxEmit);
