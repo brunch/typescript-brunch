@@ -56,9 +56,6 @@ const toMeaningfulMessage = err => `Error ${err.code}: ${err.messageText} (${err
 
 class TypeScriptCompiler {
   constructor(config) {
-    if (!config) {
-      config = {};
-    }
 
     const options = config.plugins && config.plugins.brunchTypescript || {};
     this.options = getTsconfig(config.paths && config.paths.root);
