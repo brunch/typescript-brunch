@@ -54,8 +54,10 @@ const toMeaningfulMessage = err => `Error ${err.code}: ${err.messageText} (${err
 
 class TypeScriptCompiler {
   constructor(config) {
+    const options = config.plugins.typescript ||
+      config.plugins.brunchTypescript ||
+      {};
 
-    const options = config.plugins && config.plugins.brunchTypescript || {};
     this.options = getTSconfig(config);
 
     Object.keys(options).forEach(key => {
