@@ -20,13 +20,11 @@ const resolveEnum = (choice, opts) => {
   return defaultValue;
 };
 
-const getTsconfig = configRoot => {
-  if (!configRoot) return {};
-
-  const file = path.resolve(configRoot, 'tsconfig.json');
+const getTSconfig = config => {
+  const TSconfig = path.resolve(config.paths.root, 'tsconfig.json');
 
   try {
-    return require(file).compilerOptions;
+    return require(TSconfig).compilerOptions;
   } catch (e) {
     return {};
   }
@@ -58,7 +56,7 @@ class TypeScriptCompiler {
   constructor(config) {
 
     const options = config.plugins && config.plugins.brunchTypescript || {};
-    this.options = getTsconfig(config.paths && config.paths.root);
+    this.options = getTSconfig(config);
 
     Object.keys(options).forEach(key => {
       if (key === 'sourceMap' || key === 'ignore') return;
