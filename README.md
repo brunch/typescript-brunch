@@ -4,11 +4,11 @@ Adds TypeScript support to [Brunch](http://brunch.io).
 
 ## Usage
 
-Install the plugin via NPM with `npm install --save-dev typescript-brunch`.
+Install the plugin and TypeScript via NPM with `npm install --save-dev typescript-brunch typescript`.
 
 Or, do manual install:
 
-* Add `"typescript-brunch": "x.y"` to `package.json` of your brunch app. Pick a plugin version that corresponds to your major.minor (x.y) Brunch version.
+* Add `"typescript-brunch": "x.y"` to `package.json` of your brunch app. Pick a plugin version that corresponds to your major.minor (x.y) Brunch version. You still need to install TypeScript manually `npm install --save-dev typescript`.
 * If you want to use git version of plugin, add
 `"typescript-brunch": "github:brunch/typescript-brunch"`.
 
