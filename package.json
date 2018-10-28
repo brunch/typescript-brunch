@@ -36,7 +36,7 @@
   },
   "peerDependencies": {
     "brunch": "^2.2.0",
-    "typescript": "^2.0.0"
+    "typescript": "^3.0.0 || ^2.0.0"
   },
   "eslintConfig": {
     "extends": "brunch"
