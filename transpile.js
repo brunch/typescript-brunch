@@ -16,15 +16,11 @@ const transpileModule = (input, transpileOptions) => {
   const options = ts.clone(transpileOptions.compilerOptions);
 
   options.isolatedModules = true;
-  // transpileModule does not write anything to disk so there is no need to verify that there are no conflicts between input and output paths.
+  // transpileModule does not write anything to disk so there is no need to
+  // verify that there are no conflicts between input and output paths.
   options.suppressOutputPathCheck = true;
   // Filename can be non-ts file.
   options.allowNonTsExtensions = true;
-  // We are not returning a sourceFile for lib file when asked by the program,
-  // so pass --noLib to avoid reporting a file not found error.
-  options.noLib = true;
-  // In case it was defined, this is needed to work with noLib above.
-  options.lib = undefined;
   // We are not doing a full typecheck, we are not resolving the whole context,
   // so pass --noResolve to avoid reporting missing file errors.
   options.noResolve = true;
@@ -42,52 +38,35 @@ const transpileModule = (input, transpileOptions) => {
 
   sourceFile.renamedDependencies = transpileOptions.renamedDependencies;
 
-  const newLine = ts.getNewLineCharacter(options);
-
   // Output
   let outputText;
   let sourceMapText;
 
-  // Create a compilerHost object to allow the compiler to read and write files
-  const compilerHost = {
-    getSourceFile(fileName /* target*/) {
-      return fileName === ts.normalizeSlashes(inputFileName) ?
-        sourceFile :
-        undefined;
-    },
-    writeFile(name, text /* writeByteOrderMark */) {
-      if (ts.fileExtensionIs(name, '.map')) {
-        ts.Debug.assert(sourceMapText === undefined, `Unexpected multiple source map outputs for the file '${name}'`);
-        sourceMapText = text;
-      } else {
-        ts.Debug.assert(outputText === undefined, `Unexpected multiple outputs for the file: '${name}'`);
-        outputText = text;
-      }
-    },
-    getDefaultLibFileName() {
-      return 'lib.d.ts';
-    },
-    useCaseSensitiveFileNames() {
-      return false;
-    },
-    getCanonicalFileName(fileName) {
-      return fileName;
-    },
-    getCurrentDirectory() {
-      return '';
-    },
-    getNewLine() {
-      return newLine;
-    },
-    fileExists(fileName) {
-      return fileName === inputFileName;
-    },
-    readFile(/* fileName */) {
-      return '';
-    },
-    directoryExists(/* directoryExists */) {
-      return true;
-    },
+  // Create a default compiler host object.
+  const compilerHost = ts.createCompilerHost(options);
+
+  // Setup our own getSourceFile() function.
+  const origGetSourceFile = compilerHost.getSourceFile;
+  compilerHost.getSourceFile = (fileName, languageVersion, onError) => {
+    // If the compiler is asking for the file we're compiling, return the
+    // sourceFile we prepared above.
+    if (fileName === ts.normalizeSlashes(inputFileName)) {
+      return sourceFile;
+    }
+    // Otherwise, handoff to the default getSourceFile function.
+    return origGetSourceFile(fileName, languageVersion, onError);
+  };
+
+  // Setup our own writeFile() function to capture the compiled ouput and
+  // source map.
+  compilerHost.writeFile = (name, text /* writeByteOrderMark */) => {
+    if (ts.fileExtensionIs(name, '.map')) {
+      ts.Debug.assert(sourceMapText === undefined, `Unexpected multiple source map outputs for the file '${name}'`);
+      sourceMapText = text;
+    } else {
+      ts.Debug.assert(outputText === undefined, `Unexpected multiple outputs for the file: '${name}'`);
+      outputText = text;
+    }
   };
 
   const program = ts.createProgram([inputFileName], options, compilerHost);
