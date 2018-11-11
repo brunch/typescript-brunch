@@ -1,4 +1,6 @@
 // Our test app's brunch config, based on brunch init.
+'use strict';
+
 module.exports =
 {
   // Disable OS notifications, since brunch will crash if you don't have the
@@ -12,7 +14,7 @@ module.exports =
     // Package any styles as well.
     stylesheets: {joinTo: 'app.css'}
   },
-  
+
   plugins:
   {
     // Let's use TSLint to double-check that our TypeScript files don't have
@@ -21,12 +23,12 @@ module.exports =
     {
       config:
       {
-	extends: 'tslint:recommended',
-	notafield: false,
-	rules:
-	{
+        extends: 'tslint:recommended',
+        notafield: false,
+        rules:
+        {
           'no-console': false
-	}
+        }
       }
     },
 
