@@ -27,6 +27,11 @@ module.exports =
         notafield: false,
         rules:
         {
+          'max-classes-per-file': false,
+          'no-empty': false,
+          'one-line': false,
+          'quotemark': false,
+          'member-ordering': false,
           'no-console': false
         }
       }
