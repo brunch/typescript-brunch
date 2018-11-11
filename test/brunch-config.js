@@ -15,7 +15,7 @@ module.exports =
   
   plugins:
   {
-    // Let's use tslint to double-check that our TypeScript files don't have
+    // Let's use TSLint to double-check that our TypeScript files don't have
     // any problems.
     tslint:
     {
@@ -33,8 +33,14 @@ module.exports =
     // Configure the typescript-brunch plugin.  These are compiler options
     // that tsc would expect to find in a tsconfig.json file in the
     // "compilerOptons" section.
+    //
+    // These options should roughly match those in app/app-tsconfig.json if
+    // you wish to run tsc to double-check compilation.
     brunchTypescript:
     {
+      // Use the ES3 target if you want compilation to fail.  The test app
+      // uses some features only found in later version of JavaScript.
+      //target: 'ES3',
       target: 'ES2015',
       strict: true,
       pretty: true,
@@ -52,8 +58,8 @@ module.exports =
         off:
         [
           // Some of the app's brunch plugins don't work with really old
-          // versions of typescript, so we disable them here.
-          'tslint-brunch',
+          // versions of typescript, so we disable them here as necessary.
+          //'tslint-brunch',
           'uglify-js-brunch'
         ]
       }
