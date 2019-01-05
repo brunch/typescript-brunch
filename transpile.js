@@ -30,6 +30,27 @@ const transpileModule = (input, transpileOptions) => {
   const inputFileName = transpileOptions.fileName ||
     (options.jsx ? 'module.tsx' : 'module.ts');
 
+  // If options.lib is specified, then we must translate the provided lib
+  // names into the actual filenames that TS expects to find.
+  //
+  // See https://github.com/Microsoft/TypeScript/issues/29258
+  //
+  if (options.lib)
+  {
+    if (! Array.isArray(options.lib))
+    {
+      options.lib = [options.lib];
+    }
+
+    options.lib = options.lib.map(
+      (libName) =>
+      {
+        // TS lib filenames are in the format 'lib.<name>.d.ts', in
+        // lower-case.
+        return 'lib.' + libName.toLowerCase() + '.d.ts';
+      });
+  }
+
   const sourceFile = ts.createSourceFile(inputFileName, input, options.target);
 
   if (transpileOptions.moduleName) {

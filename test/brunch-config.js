@@ -49,6 +49,9 @@ module.exports =
       // uses some features only found in later version of JavaScript.
       //target: 'ES3',
       target: 'ES2015',
+      // Explicitly specify the libs to include to test the name-to-file
+      // mapping.
+      lib: ['ES2015', 'DOM'],
       strict: true,
       pretty: true,
       sourceMap: true,
