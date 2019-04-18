@@ -30,12 +30,24 @@ const getTsconfig = configRoot => {
   // Read the contents of the JSON file.
   let json = fs.readFileSync(file, {encoding: 'utf8'});
 
-  // Strip // comments.  Stripping /**/ comments is more difficult and it's
-  // not clear if those are permitted in tsconfig.json anyway.
+  // Strip // comments.
+  //
+  // GOTCHA: This is very naive, and doesn't avoid stripping '//' from JSON
+  // strings.
+  //
+  // Don't bother stripping /**/ comments since it's not clear if those are
+  // permitted in tsconfig.json anyway.
   json = json.replace(/\/\/.*\r?\n/g, '');
 
   // Parse the JSON into an object.
-  return JSON.parse(json);
+  const options = JSON.parse(json);
+  
+  // Use default compiler options if none present.
+  if (options.compilerOptions === undefined)
+  {
+    return {};
+  }
+  return options.compilerOptions;
 };
 
 const findLessOrEqual = (haystack, needle) => {
