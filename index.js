@@ -4,6 +4,7 @@ const transpileModule = require('./transpile');
 const ts = require('typescript');
 const anymatch = require('anymatch');
 const path = require('path');
+const fs = require('fs');
 
 const resolveEnum = (choice, opts) => {
   const defaultValue = 1; // CommonJS/ES5/Preserve JSX defaults
@@ -20,16 +21,21 @@ const resolveEnum = (choice, opts) => {
   return defaultValue;
 };
 
+// Throws an error if the config cannot be read or parsed.
 const getTsconfig = configRoot => {
   if (!configRoot) return {};
 
   const file = path.resolve(configRoot, 'tsconfig.json');
 
-  try {
-    return require(file).compilerOptions;
-  } catch (e) {
-    return {};
-  }
+  // Read the contents of the JSON file.
+  let json = fs.readFileSync(file, {encoding: 'utf8'});
+
+  // Strip // comments.  Stripping /**/ comments is more difficult and it's
+  // not clear if those are permitted in tsconfig.json anyway.
+  json = json.replace(/\/\/.*\r?\n/g, '');
+
+  // Parse the JSON into an object.
+  return JSON.parse(json);
 };
 
 const findLessOrEqual = (haystack, needle) => {
