@@ -41,10 +41,9 @@ const getTsconfig = configRoot => {
 
   // Parse the JSON into an object.
   const options = JSON.parse(json);
-  
+
   // Use default compiler options if none present.
-  if (options.compilerOptions === undefined)
-  {
+  if (options.compilerOptions === undefined) {
     return {};
   }
   return options.compilerOptions;
