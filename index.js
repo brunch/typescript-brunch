@@ -30,14 +30,9 @@ const getTsconfig = configRoot => {
   // Read the contents of the JSON file.
   let json = fs.readFileSync(file, {encoding: 'utf8'});
 
-  // Strip // comments.
-  //
-  // GOTCHA: This is very naive, and doesn't avoid stripping '//' from JSON
-  // strings.
-  //
-  // Don't bother stripping /**/ comments since it's not clear if those are
-  // permitted in tsconfig.json anyway.
-  json = json.replace(/\/\/.*\r?\n/g, '');
+  // Strip // and /**/ comments from the JSON, preserving those found within
+  // JSON strings.
+  json = json.replace(/\/\/.*|\/\*[\s\S]*?\*\/|("(\\.|[^"])*")/g, '$1');
 
   // Parse the JSON into an object.
   const options = JSON.parse(json);
