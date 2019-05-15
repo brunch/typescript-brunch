@@ -1,29 +1,16 @@
 'use strict';
 
+const path = require('path');
 const ts = require('typescript');
-
-const ignoredErrors = new Set([
-  1208, // Cannot compile namespaces when the '--isolatedModules' flag is provided.
-  2307, // Cannot find module '{0}'.
-  2304, // Cannot find name '{0}'.
-  2322, // Type '{0}' is not assignable to type '{1}'.
-  2339, // Property '{0}' does not exist on type '{1}'.
-]);
-
-const filterErrors = err => !ignoredErrors.has(err.code);
 
 const transpileModule = (input, transpileOptions) => {
   const options = ts.clone(transpileOptions.compilerOptions);
 
-  options.isolatedModules = true;
   // transpileModule does not write anything to disk so there is no need to
   // verify that there are no conflicts between input and output paths.
   options.suppressOutputPathCheck = true;
   // Filename can be non-ts file.
   options.allowNonTsExtensions = true;
-  // We are not doing a full typecheck, we are not resolving the whole context,
-  // so pass --noResolve to avoid reporting missing file errors.
-  options.noResolve = true;
   // We do want to emit here, so specifically enable it.
   options.noEmit = false;
   // if jsx is specified then treat file as .tsx
@@ -52,7 +39,10 @@ const transpileModule = (input, transpileOptions) => {
   }
 
   const sourceFile = ts.createSourceFile(inputFileName, input, options.target);
-
+  const normalizedFileName = ts.normalizeSlashes(inputFileName);
+  const parsedFileName = path.parse(normalizedFileName);
+  const baseFileName = parsedFileName.dir + path.sep + parsedFileName.name;
+  
   if (transpileOptions.moduleName) {
     sourceFile.moduleName = transpileOptions.moduleName;
   }
@@ -71,7 +61,7 @@ const transpileModule = (input, transpileOptions) => {
   compilerHost.getSourceFile = (fileName, languageVersion, onError) => {
     // If the compiler is asking for the file we're compiling, return the
     // sourceFile we prepared above.
-    if (fileName === ts.normalizeSlashes(inputFileName)) {
+    if (fileName === normalizedFileName) {
       return sourceFile;
     }
     // Otherwise, handoff to the default getSourceFile function.
@@ -81,6 +71,26 @@ const transpileModule = (input, transpileOptions) => {
   // Setup our own writeFile() function to capture the compiled ouput and
   // source map.
   compilerHost.writeFile = (name, text /* writeByteOrderMark */) => {
+
+    // If noResolve is false, then TS will emit compiled text for each module
+    // imported by the file being compiled.  We ignore these in this case.
+    if (! options.noResolve)
+    {
+      // TS changes the filename extension to .js, so we only look at the path
+      // and base name.
+      const parsedName = path.parse(name);
+      // Source maps will have '.js.map' extensions, so account for that as
+      // well by parsing the name portion twice.
+      const baseName =
+        parsedName.dir + path.sep + path.parse(parsedName.name).name;
+
+      if (baseName !== baseFileName)
+      {
+        // Ignore the compiled output of an imported module.
+        return;
+      }
+    }
+
     if (ts.fileExtensionIs(name, '.map')) {
       ts.Debug.assert(sourceMapText === undefined, `Unexpected multiple source map outputs for the file '${name}'`);
       sourceMapText = text;
@@ -96,7 +106,7 @@ const transpileModule = (input, transpileOptions) => {
   if (transpileOptions.reportDiagnostics) {
     diagnostics = [];
     ts.addRange(/* to */ diagnostics, /* from */ program.getSyntacticDiagnostics(sourceFile));
-    ts.addRange(/* to */ diagnostics, /* from */ program.getSemanticDiagnostics(sourceFile).filter(filterErrors));
+    ts.addRange(/* to */ diagnostics, /* from */ program.getSemanticDiagnostics(sourceFile));
     ts.addRange(/* to */ diagnostics, /* from */ program.getOptionsDiagnostics());
   }
 

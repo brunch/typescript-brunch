@@ -40,7 +40,10 @@ const errPos = err => {
   return 'No line map';
 };
 
-const toMeaningfulMessage = err => `Error ${err.code}: ${err.messageText} (${errPos(err)})`;
+const toMeaningfulMessage = err => {
+  const msg = ts.flattenDiagnosticMessageText(err.messageText, '');
+  return `Error ${err.code}: ${msg} (${errPos(err)})`;
+};
 
 class TypeScriptCompiler {
   constructor(config) {
