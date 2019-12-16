@@ -1,6 +1,6 @@
 # typescript-brunch [![Build Status](https://travis-ci.org/brunch/typescript-brunch.svg?branch=master)](https://travis-ci.org/brunch/typescript-brunch)
 
-Adds TypeScript support to [Brunch](http://brunch.io).
+Adds TypeScript support to [Brunch](https://brunch.io).
 
 ## Usage
 
